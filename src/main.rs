@@ -597,6 +597,15 @@ fn tour_script(name: &str) -> zapfast::demo::tour::Script {
     zapfast::demo::tour::Script::from_name(name).unwrap_or_default()
 }
 
+/// Metal on macOS, where Apple's OpenGL presents frames in uneven pairs on a
+/// ProMotion display (scrolling moved at 60 Hz on a 120 Hz screen). Only
+/// macOS builds wgpu.
+#[cfg(target_os = "macos")]
+const RENDERER: eframe::Renderer = eframe::Renderer::Wgpu;
+/// OpenGL everywhere else.
+#[cfg(not(target_os = "macos"))]
+const RENDERER: eframe::Renderer = eframe::Renderer::Glow;
+
 fn native_options(
     demo_persistence: Option<std::path::PathBuf>,
     geometry: fastframe_shell::window::Geometry,
@@ -637,6 +646,7 @@ fn native_options(
         .with_decorations(!fastframe_titlebar::enabled());
     eframe::NativeOptions {
         viewport,
+        renderer: RENDERER,
         persistence_path: demo_persistence,
         // The settings remember the window (fastframe_shell::window::Geometry),
         // in logical pixels. eframe's own copy is in points at the zoom of the
@@ -1063,6 +1073,24 @@ mod tests {
             ])
             .is_err()
         );
+    }
+}
+
+#[cfg(test)]
+mod renderer_tests {
+    use super::*;
+
+    /// Metal on macOS, which OpenGL cannot pace on a ProMotion display, and
+    /// OpenGL everywhere else.
+    #[test]
+    fn the_window_draws_with_the_platform_renderer() {
+        let options = native_options(None, fastframe_shell::window::Geometry::default(), false);
+        let expected = if cfg!(target_os = "macos") {
+            "wgpu"
+        } else {
+            "glow"
+        };
+        assert_eq!(options.renderer.to_string(), expected);
     }
 }
 

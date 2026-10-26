@@ -9,6 +9,9 @@
 //! writes it back, blurred at the top and easing to sharp over the bottom
 //! `fade`, so the messages do not stop at a line. Callers keep it within
 //! the header, as macOS does.
+//!
+//! macOS draws with wgpu, whose single render pass cannot read the frame
+//! back, so this is not built there and the header keeps only its veil.
 
 use std::sync::{Arc, Mutex};
 

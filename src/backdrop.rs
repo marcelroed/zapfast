@@ -4,7 +4,8 @@
 //! where the platform refuses, the window stays opaque in the theme's
 //! colours, which still looks right.
 //!
-//! The theme draws its frosted header, glass and tints itself, everywhere;
+//! The theme draws its frosted header (tinted only, on macOS: see
+//! `ui::glass`), glass and tints itself, everywhere;
 //! only whether the desktop shows through the window is decided here, once
 //! per frame, and [`active`] tells the rest of the interface.
 

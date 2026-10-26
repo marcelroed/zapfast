@@ -76,6 +76,9 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
             .scope_builder(egui::UiBuilder::new().layer_id(layer), |ui| {
                 // Beneath the header: the messages under it, frosted, and a
                 // veil of the chat's colour that keeps the title readable.
+                // macOS draws with wgpu, which cannot frost (`glass`): the
+                // veil alone covers them there.
+                #[cfg(not(target_os = "macos"))]
                 let glass = ui.painter().add(egui::Shape::Noop);
                 let veil = ui.painter().add(egui::Shape::Noop);
                 header(app, ui, &chat);
@@ -87,6 +90,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                 // a little below it, so where they start never shows.
                 let frosted = bar.with_max_y(bar.bottom() + HEADER_TAIL);
                 let ease = HEADER_TAIL + bar.height() * HEADER_EASE;
+                #[cfg(not(target_os = "macos"))]
                 ui.painter().set(glass, super::glass::shape(frosted, ease));
                 ui.painter()
                     .set(veil, header_veil(&app.palette, frosted, ease));

@@ -7,6 +7,7 @@ pub mod chats;
 pub mod conversation;
 pub mod dialogs;
 pub(crate) mod focus;
+#[cfg(not(target_os = "macos"))]
 mod glass;
 pub mod image_editor;
 pub mod image_preview;

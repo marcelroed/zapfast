@@ -520,6 +520,15 @@ protocol. These notes are for coding agents and new contributors.
   Vsync stays on elsewhere. Spotifast, RekordFlash and TonePush pin the same
   two revisions; move them together. Repaints are event-driven, so nothing
   spins.
+- macOS draws with eframe's wgpu renderer on Metal (`RENDERER` in `main`),
+  Windows and Linux with glow. Apple's OpenGL presents in uneven pairs on a
+  ProMotion display, two frames about 3 ms apart in each 16.7 ms, so
+  scrolling moved at 60 Hz on a 120 Hz screen; Metal presents every refresh,
+  and at the display's own rate (60 Hz in Low Power Mode). glow stays
+  compiled in on macOS because fastframe-shell enables it. The Messages
+  theme's frosted header (`ui/glass.rs`) reads the frame back mid-pass,
+  which egui-wgpu's single render pass cannot, so on macOS the header keeps
+  only its veil over the messages scrolling under it.
 - `src/voice.rs` is the codec for voice messages: OGG/Opus in and out
   (the `ogg` crate for the container, `opus` with libopus bundled and
   built by cmake for the codec, so cmake is a build dependency), plus

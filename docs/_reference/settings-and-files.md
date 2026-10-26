@@ -121,7 +121,8 @@ name or description, in the interface language or in English.
   greys, with bubbles shaped, spaced and coloured as Messages on the Mac
   draws them (yours in iMessage blue, shading deeper down the window), the
   Mac's system blue for buttons and highlights, a frosted header that
-  messages scroll under, and photos without a bubble. Its sidebar and
+  messages scroll under (tinted without the blur on macOS, where ZapFast
+  draws with Metal), and photos without a bubble. Its sidebar and
   conversation show the desktop through the window where the platform
   offers a material: AppKit's on macOS, Mica on Windows 11 22H2 and later,
   and Hyprland's blur on Linux. Elsewhere, including other Linux desktops,

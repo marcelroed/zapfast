@@ -37,7 +37,8 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 log = "0.4"
 directories = "6"
-# UI framework. glow avoids the larger wgpu dependency.
+# UI framework. glow avoids the larger wgpu dependency on Windows and Linux;
+# macOS draws with wgpu (see its dependencies below).
 eframe = { version = "0.36.2", default-features = false, features = ["accesskit", "glow", "default_fonts", "links", "wayland", "x11", "persistence"] }
 egui = "0.36.2"
 egui_extras = { version = "0.36.2", features = ["file", "image", "svg", "webp", "gif"] }
@@ -274,6 +275,11 @@ raw-window-handle = "0.6"
 winit = { version = "0.30", default-features = false, features = ["wayland-csd-adwaita"] }
 
 [target.'cfg(target_os = "macos")'.dependencies]
+# Metal through wgpu, chosen in `native_options`. Apple's OpenGL presents in
+# uneven pairs on a ProMotion display, two frames about 3 ms apart in each
+# 16.7 ms, so scrolling moved at 60 Hz on a 120 Hz screen; Metal presents
+# every refresh. glow stays compiled in: fastframe-shell asks for it.
+eframe = { version = "0.36.2", default-features = false, features = ["wgpu"] }
 apple-native-keyring-store = { version = "1.0.2", features = ["keychain"] }
 # The application menu bar, built with tray-icon's muda at the version
 # fastframe-tray uses.

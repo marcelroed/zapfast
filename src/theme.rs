@@ -250,9 +250,10 @@ impl Palette {
         })
     }
 
-    /// Whether this is the Messages theme's glass: a frosted header, glass
-    /// pills and tints, on every platform. Whether the desktop also shows
-    /// through the window is [`crate::backdrop::active`].
+    /// Whether this is the Messages theme's glass: a frosted header (tinted
+    /// only, on macOS), glass pills and tints, on every platform. Whether
+    /// the desktop also shows through the window is
+    /// [`crate::backdrop::active`].
     pub fn vibrant(&self) -> bool {
         self.bubbles == BubbleStyle::Messages
     }
